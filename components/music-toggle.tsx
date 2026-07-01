@@ -1,0 +1,18 @@
+'use client';
+
+import { useMusic } from '@/components/music-provider';
+
+export function MusicToggle() {
+  const { isPlaying, toggleMusic } = useMusic();
+
+  return (
+    <button
+      type="button"
+      onClick={toggleMusic}
+      className="fixed bottom-5 right-5 z-50 rounded-full border border-white/70 bg-white/85 px-4 py-3 text-sm font-semibold text-wine shadow-card backdrop-blur transition hover:-translate-y-0.5 hover:bg-white"
+      aria-label={isPlaying ? 'Tắt nhạc nền' : 'Bật nhạc nền'}
+    >
+      {isPlaying ? '♪ Đang phát' : '♪ Bật nhạc'}
+    </button>
+  );
+}

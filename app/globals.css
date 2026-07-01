@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: 'Playfair Display';
+  --font-sans: 'Inter';
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fffaf0;
+  color: #332b29;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: #f4e2c5;
+  color: #6f3b3b;
+}
+
+.bg-paper {
+  background-image:
+    radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 24rem),
+    linear-gradient(135deg, rgba(255,250,240,0.96), rgba(244,226,197,0.68)),
+    url('/images/paper-texture.svg');
+}
+
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(198, 161, 91, 0.9), transparent);
+}
+
+.story-card {
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+.story-page {
+  box-shadow: 0 24px 80px rgba(80, 52, 38, 0.18);
+}
