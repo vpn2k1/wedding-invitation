@@ -4,7 +4,7 @@ import './globals.css';
 import { MusicProvider } from '@/components/music-provider';
 
 export const metadata: Metadata = {
-  title: 'Thiệp cưới Minh Anh & Hoàng Nam',
+  title: 'Thiệp cưới Hà Nhi & Phương Nam',
   description: 'Website thiệp cưới online serverless mẫu, có trang mở thiệp, thông tin cưới, album và lời chúc.',
 };
 

@@ -22,9 +22,9 @@ export type AlbumImage = {
 };
 
 export const weddingConfig = {
-  groomName: 'Hoàng Nam',
-  brideName: 'Minh Anh',
-  fullTitle: 'Minh Anh & Hoàng Nam',
+  groomName: 'Phương Nam',
+  brideName: 'Hà Nhi',
+  fullTitle: 'Hà Nhi & Phương Nam',
   weddingDate: '2026-12-20T18:00:00+07:00',
   displayDate: '20.12.2026',
   quote: 'Tình yêu không phải là nhìn nhau, mà là cùng nhìn về một hướng.',
@@ -37,13 +37,13 @@ export const weddingConfig = {
 
 export const couple = {
   bride: {
-    name: 'Nguyễn Minh Anh',
+    name: 'Hà Nhi',
     role: 'Cô dâu',
     description: 'Dịu dàng, yêu hoa và luôn tin rằng những điều đẹp nhất bắt đầu từ sự chân thành.',
     image: weddingConfig.brideImage,
   },
   groom: {
-    name: 'Trần Hoàng Nam',
+    name: 'Phương Nam',
     role: 'Chú rể',
     description: 'Điềm tĩnh, ấm áp và luôn muốn cùng người mình thương xây dựng một mái nhà bình yên.',
     image: weddingConfig.groomImage,
@@ -114,18 +114,18 @@ export const albumImages: AlbumImage[] = [
 
 export const bankQrList = [
   {
-    ownerName: 'Nguyễn Minh Anh',
+    ownerName: 'Hà Nhi',
     bankName: 'Vietcombank',
     accountNumber: '0123456789',
     qrImage: '/images/qr-bride.svg',
-    note: 'Mung cuoi Minh Anh Hoang Nam',
+    note: 'Mung cuoi Hà Nhi Phương Nam',
   },
   {
-    ownerName: 'Trần Hoàng Nam',
+    ownerName: 'Phương Nam',
     bankName: 'Techcombank',
     accountNumber: '9876543210',
     qrImage: '/images/qr-groom.svg',
-    note: 'Mung cuoi Minh Anh Hoang Nam',
+    note: 'Mung cuoi Hà Nhi Phương Nam',
   },
 ];
 
