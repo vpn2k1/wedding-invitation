@@ -38,6 +38,7 @@ values (
     "heroImage": "/images/hero.svg",
     "brideImage": "/images/bride.svg",
     "groomImage": "/images/groom.svg",
+    "musicEnabled": true,
     "musicUrl": "/music/wedding-demo.wav",
     "brideDescription": "Dịu dàng, yêu hoa và luôn tin rằng những điều đẹp nhất bắt đầu từ sự chân thành.",
     "groomDescription": "Điềm tĩnh, ấm áp và luôn muốn cùng người mình thương xây dựng một mái nhà bình yên.",
