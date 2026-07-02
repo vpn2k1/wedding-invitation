@@ -72,7 +72,7 @@ npm install
 npm run dev
 ```
 
-Nếu nhiều website thiệp cưới dùng chung một Supabase, tạo thêm record trong `wedding_sites`, rồi mỗi project đặt `NEXT_PUBLIC_SITE_ID` khác nhau. Các bảng `album_images` và `guest_comments` đều được tách theo `site_id`.
+Nếu nhiều project muốn đọc/chỉnh cùng một bộ dữ liệu, copy cùng `NEXT_PUBLIC_SITE_ID` sang tất cả project. Nếu muốn tách dữ liệu từng website trong cùng Supabase, tạo thêm record trong `wedding_sites`, rồi mỗi project đặt `NEXT_PUBLIC_SITE_ID` khác nhau. Các bảng `site_settings`, `album_images` và `guest_comments` đều được tách theo `site_id`.
 
 API hiện có:
 
