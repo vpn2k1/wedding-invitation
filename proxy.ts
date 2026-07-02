@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const ADMIN_SESSION_COOKIE = 'admin_session';
 const protectedPaths = ['/admin', '/api/admin'];
 
 export function proxy(request: NextRequest) {
-  const isProtectedPath = protectedPaths.some((path) => request.nextUrl.pathname.startsWith(path));
+  const pathname = request.nextUrl.pathname;
+  const isLoginPage = pathname === '/admin/login';
+  const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
 
-  if (!isProtectedPath) {
+  if (!isProtectedPath || isLoginPage) {
     return NextResponse.next();
   }
 
@@ -17,25 +20,26 @@ export function proxy(request: NextRequest) {
       return NextResponse.next();
     }
 
-    return new NextResponse('Admin auth is not configured.', { status: 503 });
+    return pathname.startsWith('/api/')
+      ? NextResponse.json({ success: false, message: 'Admin auth is not configured.' }, { status: 503 })
+      : NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
-  const authorization = request.headers.get('authorization');
+  const expectedSession = btoa(`${username}:${password}`);
+  const currentSession = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
 
-  if (authorization?.startsWith('Basic ')) {
-    const [providedUsername, providedPassword] = atob(authorization.slice(6)).split(':');
-
-    if (providedUsername === username && providedPassword === password) {
-      return NextResponse.next();
-    }
+  if (currentSession === expectedSession) {
+    return NextResponse.next();
   }
 
-  return new NextResponse('Authentication required.', {
-    status: 401,
-    headers: {
-      'WWW-Authenticate': 'Basic realm="Wedding Admin"',
-    },
-  });
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.json({ success: false, message: 'Bạn cần đăng nhập admin.' }, { status: 401 });
+  }
+
+  const loginUrl = new URL('/admin/login', request.url);
+  loginUrl.searchParams.set('next', `${pathname}${request.nextUrl.search}`);
+
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {

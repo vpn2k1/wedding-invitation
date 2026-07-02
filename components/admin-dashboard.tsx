@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { getFallbackSiteSettings } from '@/lib/supabase/mappers';
 import type { AlbumImage, WeddingSiteSettings } from '@/lib/supabase/types';
@@ -18,6 +19,7 @@ type SettingsResponse = {
 };
 
 export function AdminDashboard() {
+  const router = useRouter();
   const [settings, setSettings] = useState<WeddingSiteSettings>(getFallbackSiteSettings());
   const [activePanel, setActivePanel] = useState<'content' | 'events' | 'layout' | 'album'>('content');
   const [title, setTitle] = useState('');
@@ -155,6 +157,12 @@ export function AdminDashboard() {
     }));
   };
 
+  const handleLogout = async () => {
+    await fetch('/api/auth/admin/logout', { method: 'POST' });
+    router.replace('/admin/login');
+    router.refresh();
+  };
+
   return (
     <main className="min-h-screen bg-paper px-5 py-10 text-ink">
       <div className="mx-auto max-w-7xl">
@@ -163,14 +171,23 @@ export function AdminDashboard() {
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-goldSoft">Admin</p>
             <h1 className="font-serif text-4xl text-wine md:text-5xl">Quản lý thiệp cưới</h1>
           </div>
-          <button
-            type="button"
-            onClick={saveSettings}
-            disabled={isSavingSettings}
-            className="rounded-full bg-wine px-6 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-card transition hover:bg-[#5e3030] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isSavingSettings ? 'Đang lưu...' : 'Lưu thay đổi'}
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="rounded-full border border-wine/20 bg-white/80 px-6 py-4 text-sm font-bold uppercase tracking-[0.18em] text-wine transition hover:bg-wine hover:text-white"
+            >
+              Đăng xuất
+            </button>
+            <button
+              type="button"
+              onClick={saveSettings}
+              disabled={isSavingSettings}
+              className="rounded-full bg-wine px-6 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-card transition hover:bg-[#5e3030] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSavingSettings ? 'Đang lưu...' : 'Lưu thay đổi'}
+            </button>
+          </div>
         </div>
 
         {(notice || error) && (

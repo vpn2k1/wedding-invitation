@@ -88,6 +88,15 @@ POST /api/admin/album/upload
 
 Trang `/admin` và các API `/api/admin/*` được bảo vệ bằng Basic Auth qua `ADMIN_USERNAME` và `ADMIN_PASSWORD` khi chạy production. Ở local development, nếu chưa cấu hình hai biến này thì admin được mở để tiện setup ban đầu. Các Supabase key, service role key và site id đều cấu hình trong `.env.local`, không nhập trên giao diện admin.
 
+`ADMIN_USERNAME` và `ADMIN_PASSWORD` không lấy từ Supabase. Đây là tài khoản admin đơn giản do bạn tự đặt trong `.env.local`, ví dụ:
+
+```env
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=doi-mat-khau-nay
+```
+
+Sau khi cấu hình, vào `/admin/login` để đăng nhập rồi quản lý nội dung thiệp.
+
 Sau đó mở:
 
 ```txt
