@@ -86,7 +86,7 @@ PUT  /api/admin/site/settings
 POST /api/admin/album/upload
 ```
 
-Trang `/admin` và các API `/api/admin/*` được bảo vệ bằng Basic Auth qua `ADMIN_USERNAME` và `ADMIN_PASSWORD`. Các Supabase key, service role key và site id đều cấu hình trong `.env.local`, không nhập trên giao diện admin.
+Trang `/admin` và các API `/api/admin/*` được bảo vệ bằng Basic Auth qua `ADMIN_USERNAME` và `ADMIN_PASSWORD` khi chạy production. Ở local development, nếu chưa cấu hình hai biến này thì admin được mở để tiện setup ban đầu. Các Supabase key, service role key và site id đều cấu hình trong `.env.local`, không nhập trên giao diện admin.
 
 Sau đó mở:
 

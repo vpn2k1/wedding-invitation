@@ -13,6 +13,10 @@ export function proxy(request: NextRequest) {
   const password = process.env.ADMIN_PASSWORD;
 
   if (!username || !password) {
+    if (process.env.NODE_ENV === 'development') {
+      return NextResponse.next();
+    }
+
     return new NextResponse('Admin auth is not configured.', { status: 503 });
   }
 
