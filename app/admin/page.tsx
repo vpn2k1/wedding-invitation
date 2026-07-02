@@ -1,5 +1,5 @@
-import { AdminAlbumUpload } from '@/components/admin-album-upload';
+import { AdminDashboard } from '@/components/admin-dashboard';
 
 export default function AdminPage() {
-  return <AdminAlbumUpload />;
+  return <AdminDashboard />;
 }

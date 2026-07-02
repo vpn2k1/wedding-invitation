@@ -1,13 +1,18 @@
+'use client';
+
 import { SectionHeading } from '@/components/section-heading';
-import { events } from '@/lib/wedding-data';
+import { useSiteSettings } from '@/components/site-settings-provider';
 
 export function EventsSection() {
+  const { settings } = useSiteSettings();
+  const gridClassName = settings.layout.eventColumns === '2' ? 'md:grid-cols-2' : 'md:grid-cols-3';
+
   return (
     <section className="bg-[#fff6e6] px-5 py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading eyebrow="Wedding Events" title="Thông tin buổi lễ" description="Mong bạn lưu lại thời gian và đến chung vui cùng gia đình hai bên." />
-        <div className="grid gap-5 md:grid-cols-3">
-          {events.map((event) => (
+        <div className={`grid gap-5 ${gridClassName}`}>
+          {settings.events.map((event) => (
             <article key={event.title} className="flex h-full flex-col rounded-[2rem] border border-white bg-white/75 p-6 shadow-card backdrop-blur">
               <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-champagne text-2xl">✦</div>
               <h3 className="font-serif text-3xl text-wine">{event.title}</h3>

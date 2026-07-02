@@ -1,5 +1,5 @@
-import { albumImages, initialComments } from '@/lib/wedding-data';
-import type { AlbumImage, AlbumImageRow, GuestComment, GuestCommentRow } from '@/lib/supabase/types';
+import { albumImages, events, initialComments, weddingConfig, couple } from '@/lib/wedding-data';
+import type { AlbumImage, AlbumImageRow, GuestComment, GuestCommentRow, WeddingSiteSettings, WeddingSiteSettingsRow } from '@/lib/supabase/types';
 
 const fallbackSiteId = process.env.NEXT_PUBLIC_SITE_ID || 'static-site';
 
@@ -61,4 +61,55 @@ export function getFallbackComments(): GuestComment[] {
     isVisible: true,
     createdAt: new Date(Date.now() - index * 60_000).toISOString(),
   }));
+}
+
+export function getFallbackSiteSettings(): WeddingSiteSettings {
+  return {
+    siteId: fallbackSiteId,
+    slug: 'ha-nhi-phuong-nam',
+    brideName: weddingConfig.brideName,
+    groomName: weddingConfig.groomName,
+    fullTitle: weddingConfig.fullTitle,
+    weddingDate: weddingConfig.weddingDate,
+    displayDate: weddingConfig.displayDate,
+    quote: weddingConfig.quote,
+    coverImage: weddingConfig.coverImage,
+    heroImage: weddingConfig.heroImage,
+    brideImage: weddingConfig.brideImage,
+    groomImage: weddingConfig.groomImage,
+    musicUrl: weddingConfig.musicUrl,
+    brideDescription: couple.bride.description,
+    groomDescription: couple.groom.description,
+    events,
+    layout: {
+      eventColumns: '3',
+      showAlbum: true,
+      showQr: true,
+      showTimeline: true,
+      showComments: true,
+    },
+    updatedAt: null,
+  };
+}
+
+export function mapSiteSettings(row: WeddingSiteSettingsRow): WeddingSiteSettings {
+  const fallback = getFallbackSiteSettings();
+  const settings = row.settings || {};
+
+  return {
+    ...fallback,
+    ...settings,
+    siteId: row.site_id,
+    slug: settings.slug || row.wedding_sites?.slug || fallback.slug,
+    brideName: settings.brideName || row.wedding_sites?.bride_name || fallback.brideName,
+    groomName: settings.groomName || row.wedding_sites?.groom_name || fallback.groomName,
+    fullTitle: settings.fullTitle || `${settings.brideName || row.wedding_sites?.bride_name || fallback.brideName} & ${settings.groomName || row.wedding_sites?.groom_name || fallback.groomName}`,
+    weddingDate: settings.weddingDate || row.wedding_sites?.wedding_date || fallback.weddingDate,
+    events: settings.events?.length ? settings.events : fallback.events,
+    layout: {
+      ...fallback.layout,
+      ...settings.layout,
+    },
+    updatedAt: row.updated_at,
+  };
 }

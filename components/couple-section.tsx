@@ -1,9 +1,25 @@
+'use client';
+
 import Image from 'next/image';
 import { SectionHeading } from '@/components/section-heading';
-import { couple } from '@/lib/wedding-data';
+import { useSiteSettings } from '@/components/site-settings-provider';
 
 export function CoupleSection() {
-  const people = [couple.bride, couple.groom];
+  const { settings } = useSiteSettings();
+  const people = [
+    {
+      name: settings.brideName,
+      role: 'Cô dâu',
+      description: settings.brideDescription,
+      image: settings.brideImage,
+    },
+    {
+      name: settings.groomName,
+      role: 'Chú rể',
+      description: settings.groomDescription,
+      image: settings.groomImage,
+    },
+  ];
 
   return (
     <section className="px-5 py-20">

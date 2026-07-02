@@ -4,11 +4,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useMusic } from '@/components/music-provider';
-import { weddingConfig } from '@/lib/wedding-data';
+import { useSiteSettings } from '@/components/site-settings-provider';
 
 export function OpeningCard() {
   const router = useRouter();
   const { startMusic } = useMusic();
+  const { settings } = useSiteSettings();
   const [isOpening, setIsOpening] = useState(false);
 
   const handleOpen = async () => {
@@ -28,10 +29,10 @@ export function OpeningCard() {
         <div className="grid w-full items-center gap-8 md:grid-cols-[0.95fr_1.05fr]">
           <div className="text-center md:text-left">
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.42em] text-goldSoft">Wedding Invitation</p>
-            <h1 className="font-serif text-5xl leading-tight text-wine md:text-7xl">{weddingConfig.fullTitle}</h1>
+            <h1 className="font-serif text-5xl leading-tight text-wine md:text-7xl">{settings.fullTitle}</h1>
             <div className="gold-divider my-7" />
             <p className="mx-auto max-w-lg text-lg leading-8 text-ink/70 md:mx-0">Trân trọng kính mời bạn đến chung vui cùng chúng mình trong ngày đặc biệt.</p>
-            <p className="mt-5 font-serif text-3xl text-wine">{weddingConfig.displayDate}</p>
+            <p className="mt-5 font-serif text-3xl text-wine">{settings.displayDate}</p>
           </div>
 
           <div className="story-card mx-auto w-full max-w-md">
@@ -41,11 +42,11 @@ export function OpeningCard() {
               }`}
             >
               <div className="relative aspect-[4/5] overflow-hidden rounded-[1.7rem] bg-champagne">
-                <Image src={weddingConfig.coverImage} alt="Ảnh bìa thiệp cưới" fill priority className="object-cover" />
+                <Image src={settings.coverImage} alt="Ảnh bìa thiệp cưới" fill priority className="object-cover" />
                 <div className="absolute inset-x-8 bottom-8 rounded-[2rem] border border-white/70 bg-white/75 p-6 text-center shadow-lg backdrop-blur">
                   <p className="text-xs font-bold uppercase tracking-[0.3em] text-goldSoft">Save the date</p>
-                  <p className="mt-2 font-serif text-3xl text-wine">{weddingConfig.fullTitle}</p>
-                  <p className="mt-2 text-sm text-ink/65">{weddingConfig.displayDate}</p>
+                  <p className="mt-2 font-serif text-3xl text-wine">{settings.fullTitle}</p>
+                  <p className="mt-2 text-sm text-ink/65">{settings.displayDate}</p>
                 </div>
               </div>
             </div>

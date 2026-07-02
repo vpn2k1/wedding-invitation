@@ -24,10 +24,6 @@ function getSafeFileName(fileName: string) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!process.env.ADMIN_SECRET || request.headers.get('x-admin-secret') !== process.env.ADMIN_SECRET) {
-    return NextResponse.json({ success: false, message: 'Unauthorized.' }, { status: 401 });
-  }
-
   const supabase = createSupabaseAdminClient();
 
   if (!supabase) {
@@ -37,7 +33,7 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const file = formData.get('file');
   const parsed = metadataSchema.safeParse({
-    siteId: formData.get('siteId'),
+    siteId: formData.get('siteId') || process.env.NEXT_PUBLIC_SITE_ID,
     title: formData.get('title') || undefined,
     description: formData.get('description') || undefined,
   });

@@ -26,6 +26,41 @@ export type GuestComment = {
   createdAt: string;
 };
 
+export type WeddingSiteSettings = {
+  siteId: string;
+  slug: string;
+  brideName: string;
+  groomName: string;
+  fullTitle: string;
+  weddingDate: string;
+  displayDate: string;
+  quote: string;
+  coverImage: string;
+  heroImage: string;
+  brideImage: string;
+  groomImage: string;
+  musicUrl: string;
+  brideDescription: string;
+  groomDescription: string;
+  events: {
+    title: string;
+    date: string;
+    time: string;
+    locationName: string;
+    address: string;
+    mapUrl: string;
+    description: string;
+  }[];
+  layout: {
+    eventColumns: '2' | '3';
+    showAlbum: boolean;
+    showQr: boolean;
+    showTimeline: boolean;
+    showComments: boolean;
+  };
+  updatedAt?: string | null;
+};
+
 export type AlbumImageRow = {
   id: string;
   site_id: string;
@@ -50,4 +85,16 @@ export type GuestCommentRow = {
   guest_count: number | null;
   is_visible: boolean;
   created_at: string;
+};
+
+export type WeddingSiteSettingsRow = {
+  site_id: string;
+  settings: Partial<WeddingSiteSettings>;
+  updated_at: string | null;
+  wedding_sites?: {
+    slug: string;
+    bride_name: string;
+    groom_name: string;
+    wedding_date: string | null;
+  } | null;
 };

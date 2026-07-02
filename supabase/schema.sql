@@ -47,6 +47,13 @@ create table if not exists public.guest_comments (
   created_at timestamptz default now()
 );
 
+create table if not exists public.site_settings (
+  site_id uuid primary key references public.wedding_sites(id) on delete cascade,
+  settings jsonb not null default '{}'::jsonb,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
 create index if not exists album_images_site_id_idx on public.album_images(site_id);
 create index if not exists album_images_is_visible_idx on public.album_images(is_visible);
 create index if not exists album_images_sort_order_idx on public.album_images(sort_order);
@@ -64,9 +71,15 @@ create trigger set_album_images_updated_at
 before update on public.album_images
 for each row execute function public.set_updated_at();
 
+drop trigger if exists set_site_settings_updated_at on public.site_settings;
+create trigger set_site_settings_updated_at
+before update on public.site_settings
+for each row execute function public.set_updated_at();
+
 alter table public.wedding_sites enable row level security;
 alter table public.album_images enable row level security;
 alter table public.guest_comments enable row level security;
+alter table public.site_settings enable row level security;
 
 drop policy if exists "Public can read active wedding sites" on public.wedding_sites;
 create policy "Public can read active wedding sites"
@@ -88,6 +101,20 @@ on public.guest_comments
 for select
 to anon, authenticated
 using (is_visible = true);
+
+drop policy if exists "Public can read site settings" on public.site_settings;
+create policy "Public can read site settings"
+on public.site_settings
+for select
+to anon, authenticated
+using (
+  exists (
+    select 1
+    from public.wedding_sites
+    where wedding_sites.id = site_settings.site_id
+      and wedding_sites.is_active = true
+  )
+);
 
 drop policy if exists "Public can create guest comments" on public.guest_comments;
 create policy "Public can create guest comments"

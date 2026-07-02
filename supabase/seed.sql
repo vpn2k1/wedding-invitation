@@ -22,6 +22,35 @@ values
   ('11111111-1111-4111-8111-111111111111', 'Chiều vàng', 'Ánh hoàng hôn làm câu chuyện trở nên ấm áp hơn.', '/images/album-5.svg', null, 5, true),
   ('11111111-1111-4111-8111-111111111111', 'Ngày vui', 'Cảm ơn vì đã cùng chúng mình đi tới hôm nay.', '/images/album-6.svg', null, 6, true);
 
+insert into public.site_settings (site_id, settings)
+values (
+  '11111111-1111-4111-8111-111111111111',
+  '{
+    "siteId": "11111111-1111-4111-8111-111111111111",
+    "slug": "ha-nhi-phuong-nam",
+    "brideName": "Hà Nhi",
+    "groomName": "Phương Nam",
+    "fullTitle": "Hà Nhi & Phương Nam",
+    "weddingDate": "2026-12-20T18:00:00+07:00",
+    "displayDate": "20.12.2026",
+    "quote": "Tình yêu không phải là nhìn nhau, mà là cùng nhìn về một hướng.",
+    "coverImage": "/images/cover.svg",
+    "heroImage": "/images/hero.svg",
+    "brideImage": "/images/bride.svg",
+    "groomImage": "/images/groom.svg",
+    "musicUrl": "/music/wedding-demo.wav",
+    "brideDescription": "Dịu dàng, yêu hoa và luôn tin rằng những điều đẹp nhất bắt đầu từ sự chân thành.",
+    "groomDescription": "Điềm tĩnh, ấm áp và luôn muốn cùng người mình thương xây dựng một mái nhà bình yên.",
+    "events": [
+      { "title": "Lễ Gia Tiên", "date": "20.12.2026", "time": "09:00", "locationName": "Tư gia nhà gái", "address": "12 Nguyễn Văn Hưởng, Thảo Điền, TP. Hồ Chí Minh", "mapUrl": "https://maps.google.com/?q=Thao+Dien+Ho+Chi+Minh", "description": "Buổi lễ thân mật cùng gia đình hai bên." },
+      { "title": "Tiệc Cưới", "date": "20.12.2026", "time": "18:00", "locationName": "The Garden Wedding Hall", "address": "88 Đồng Khởi, Quận 1, TP. Hồ Chí Minh", "mapUrl": "https://maps.google.com/?q=Dong+Khoi+District+1+Ho+Chi+Minh", "description": "Rất mong được đón tiếp bạn trong ngày vui của chúng mình." },
+      { "title": "After Party", "date": "20.12.2026", "time": "21:00", "locationName": "Rooftop Lounge", "address": "Quận 1, TP. Hồ Chí Minh", "mapUrl": "https://maps.google.com/?q=District+1+Ho+Chi+Minh", "description": "Một buổi tối nhẹ nhàng cùng âm nhạc, bánh ngọt và những người thân yêu." }
+    ],
+    "layout": { "eventColumns": "3", "showAlbum": true, "showQr": true, "showTimeline": true, "showComments": true }
+  }'::jsonb
+)
+on conflict (site_id) do update set settings = excluded.settings;
+
 insert into public.guest_comments (site_id, name, message, attendance_status, guest_count, is_visible, created_at)
 values
   ('11111111-1111-4111-8111-111111111111', 'Gia đình cô Lan', 'Chúc hai con trăm năm hạnh phúc, luôn yêu thương và đồng hành cùng nhau.', 'attending', 2, true, now() - interval '2 hours'),
