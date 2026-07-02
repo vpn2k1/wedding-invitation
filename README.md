@@ -1,6 +1,6 @@
 # Wedding Invitation Serverless Demo
 
-Project mẫu thiệp cưới online bằng Next.js. Bản hiện tại tập trung vào phần thiệp trước, chưa làm admin/database/upload ảnh.
+Project mẫu thiệp cưới online bằng Next.js. Album và guestbook có thể dùng Supabase, đồng thời vẫn fallback về dữ liệu static khi chưa cấu hình database.
 
 ## Tính năng đã có
 
@@ -17,13 +17,14 @@ Project mẫu thiệp cưới online bằng Next.js. Bản hiện tại tập tr
   - Timeline câu chuyện tình yêu.
   - Preview album.
   - QR code mừng cưới.
-  - Form gửi lời chúc mẫu.
-  - Danh sách lời chúc dưới footer.
+  - Form gửi lời chúc qua API.
+  - Danh sách lời chúc từ Supabase hoặc dữ liệu fallback.
 
 - Trang album `/album`
   - Xem ảnh dạng storybook/carousel.
   - Next/previous.
   - Thumbnail chọn ảnh.
+  - Ưu tiên ảnh từ Supabase Storage/Database.
 
 ## Chạy local
 
@@ -31,6 +32,48 @@ Project mẫu thiệp cưới online bằng Next.js. Bản hiện tại tập tr
 npm install
 npm run dev
 ```
+
+## Supabase setup
+
+Tạo file `.env.local` từ `.env.example`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SITE_ID=11111111-1111-4111-8111-111111111111
+ADMIN_SECRET=
+```
+
+Các bước cấu hình:
+
+1. Tạo project Supabase.
+2. Copy `NEXT_PUBLIC_SUPABASE_URL` từ Project Settings.
+3. Copy `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+4. Copy `SUPABASE_SERVICE_ROLE_KEY` và chỉ đặt trong `.env.local`, không đưa lên client.
+5. Chạy SQL trong `supabase/schema.sql` bằng Supabase SQL Editor.
+6. Tạo hoặc kiểm tra bucket public `wedding-images`.
+7. Chạy seed trong `supabase/seed.sql`.
+8. Đặt `NEXT_PUBLIC_SITE_ID` theo id trong bảng `wedding_sites`.
+9. Chạy lại project:
+
+```bash
+npm install
+npm run dev
+```
+
+Nếu nhiều website thiệp cưới dùng chung một Supabase, tạo thêm record trong `wedding_sites`, rồi mỗi project đặt `NEXT_PUBLIC_SITE_ID` khác nhau. Các bảng `album_images` và `guest_comments` đều được tách theo `site_id`.
+
+API hiện có:
+
+```txt
+GET  /api/album
+GET  /api/comments
+POST /api/comments
+POST /api/admin/album/upload
+```
+
+Upload admin nhận `multipart/form-data` với `file`, `siteId`, `title`, `description` và cần header `x-admin-secret` khớp `ADMIN_SECRET`.
 
 Sau đó mở:
 
@@ -45,6 +88,7 @@ app/
   page.tsx                  # Trang mở thiệp
   invitation/page.tsx       # Trang thông tin thiệp
   album/page.tsx            # Trang album storybook
+  api/                       # API album, comments, admin upload
 components/
   opening-card.tsx
   hero-section.tsx
@@ -59,9 +103,13 @@ components/
   music-toggle.tsx
 lib/
   wedding-data.ts           # Dữ liệu mẫu
+  supabase/                 # Supabase clients, types, mappers
 public/
   images/                   # Ảnh placeholder dạng SVG
   music/wedding-demo.wav    # Nhạc demo tự tạo
+supabase/
+  schema.sql                # Tables, indexes, RLS policies, storage bucket
+  seed.sql                  # Seed site mẫu, album, guestbook
 ```
 
 ## Chỉnh nội dung thiệp
@@ -121,20 +169,13 @@ musicUrl: '/music/wedding.mp3'
 
 Lưu ý: trình duyệt chỉ cho phát nhạc sau khi người dùng có tương tác, nên nhạc được phát sau khi bấm **Mở thiệp**.
 
-## Giai đoạn sau: thêm admin + database
+## Giai đoạn sau: thêm admin UI
 
 Có thể mở rộng theo hướng:
 
-- Database: Neon PostgreSQL.
-- ORM: Prisma.
-- Upload ảnh: Cloudinary hoặc UploadThing.
-- Admin auth: NextAuth hoặc admin password đơn giản.
+- Trang admin upload ảnh gọi `/api/admin/album/upload`.
+- Admin auth: NextAuth hoặc admin password nâng cấp.
 - API:
-  - `GET /api/album`
-  - `POST /api/admin/album`
   - `PATCH /api/admin/album/:id`
   - `DELETE /api/admin/album/:id`
-  - `POST /api/comments`
-  - `GET /api/comments`
-
-Khi đó chỉ cần đổi `lib/wedding-data.ts` từ dữ liệu static sang fetch API/database.
+  - Duyệt/ẩn lời chúc bằng `is_visible`.

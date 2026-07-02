@@ -1,40 +1,95 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
-import { initialComments } from '@/lib/wedding-data';
+import { FormEvent, useEffect, useState } from 'react';
+import { getFallbackComments } from '@/lib/supabase/mappers';
+import type { AttendanceStatus, GuestComment } from '@/lib/supabase/types';
 
-type CommentItem = {
-  name: string;
-  message: string;
-  time: string;
-};
+const attendanceOptions: { label: string; value: AttendanceStatus }[] = [
+  { label: 'Có thể tham dự', value: 'attending' },
+  { label: 'Không thể tham dự', value: 'not_attending' },
+  { label: 'Chưa chắc', value: 'maybe' },
+];
+
+function formatCommentTime(createdAt: string) {
+  const date = new Date(createdAt);
+  if (Number.isNaN(date.getTime())) return 'Vừa xong';
+
+  const diffMinutes = Math.max(0, Math.floor((Date.now() - date.getTime()) / 60_000));
+  if (diffMinutes < 1) return 'Vừa xong';
+  if (diffMinutes < 60) return `${diffMinutes} phút trước`;
+
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) return `${diffHours} giờ trước`;
+
+  return date.toLocaleDateString('vi-VN');
+}
 
 export function CommentSection() {
-  const [comments, setComments] = useState<CommentItem[]>(initialComments);
+  const [comments, setComments] = useState<GuestComment[]>(getFallbackComments());
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
-  const [attendance, setAttendance] = useState('Có thể tham dự');
+  const [attendance, setAttendance] = useState<AttendanceStatus>('attending');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [notice, setNotice] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch('/api/comments')
+      .then((response) => response.json())
+      .then((data: { comments?: GuestComment[] }) => {
+        if (isMounted && data.comments?.length) {
+          setComments(data.comments);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setComments(getFallbackComments());
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!name.trim() || !message.trim()) return;
 
     setIsSubmitting(true);
-    window.setTimeout(() => {
-      setComments((current) => [
-        {
-          name: name.trim(),
-          message: `${message.trim()} (${attendance})`,
-          time: 'Vừa xong',
-        },
-        ...current,
-      ]);
+    setNotice('');
+    setError('');
+
+    try {
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          message,
+          attendanceStatus: attendance,
+        }),
+      });
+      const data = (await response.json()) as { success: boolean; comment?: GuestComment; message?: string };
+
+      if (!response.ok || !data.success || !data.comment) {
+        throw new Error(data.message || 'Không thể gửi lời chúc lúc này.');
+      }
+
+      setComments((current) => [data.comment as GuestComment, ...current]);
       setName('');
       setMessage('');
-      setAttendance('Có thể tham dự');
+      setAttendance('attending');
+      setNotice('Cảm ơn bạn, lời chúc đã được gửi.');
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : 'Không thể gửi lời chúc lúc này.');
+    } finally {
       setIsSubmitting(false);
-    }, 450);
+    }
   };
 
   return (
@@ -62,12 +117,12 @@ export function CommentSection() {
               <select
                 id="guest-attendance"
                 value={attendance}
-                onChange={(event) => setAttendance(event.target.value)}
+                onChange={(event) => setAttendance(event.target.value as AttendanceStatus)}
                 className="w-full rounded-2xl border border-champagne bg-white px-4 py-3 outline-none transition focus:border-goldSoft"
               >
-                <option>Có thể tham dự</option>
-                <option>Không thể tham dự</option>
-                <option>Chưa chắc</option>
+                {attendanceOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
               </select>
             </div>
             <div>
@@ -88,22 +143,29 @@ export function CommentSection() {
             >
               {isSubmitting ? 'Đang gửi...' : 'Gửi lời chúc'}
             </button>
-            <p className="text-xs leading-6 text-ink/50">Bản mẫu này đang lưu lời chúc tạm trên trình duyệt. Khi làm admin/database, form sẽ chuyển sang API + database.</p>
+            {notice && <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">{notice}</p>}
+            {error && <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">{error}</p>}
           </form>
         </div>
 
         <div className="rounded-[2rem] border border-white bg-white/70 p-5 shadow-card backdrop-blur">
           <h3 className="font-serif text-3xl text-wine">Lời chúc mới nhất</h3>
           <div className="mt-5 space-y-4">
-            {comments.map((comment, index) => (
-              <article key={`${comment.name}-${index}`} className="rounded-3xl border border-champagne bg-ivory/70 p-5">
+            {isLoading && Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="h-32 animate-pulse rounded-3xl border border-champagne bg-ivory/70" />
+            ))}
+            {!isLoading && comments.map((comment) => (
+              <article key={comment.id} className="rounded-3xl border border-champagne bg-ivory/70 p-5">
                 <div className="flex items-center justify-between gap-4">
                   <h4 className="font-semibold text-wine">{comment.name}</h4>
-                  <span className="text-xs text-ink/45">{comment.time}</span>
+                  <span className="text-xs text-ink/45">{formatCommentTime(comment.createdAt)}</span>
                 </div>
                 <p className="mt-3 leading-7 text-ink/65">{comment.message}</p>
               </article>
             ))}
+            {!isLoading && comments.length === 0 && (
+              <p className="rounded-3xl border border-champagne bg-ivory/70 p-5 text-ink/60">Chưa có lời chúc nào được hiển thị.</p>
+            )}
           </div>
         </div>
       </div>

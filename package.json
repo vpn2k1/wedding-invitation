@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
@@ -17,7 +18,7 @@
     "react": "latest",
     "react-dom": "latest",
     "tailwindcss": "^3.4.17",
-    "typescript": "latest"
-  },
-  "devDependencies": {}
+    "typescript": "latest",
+    "zod": "^4.4.3"
+  }
 }
