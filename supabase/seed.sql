@@ -41,6 +41,10 @@ values (
     "musicUrl": "/music/wedding-demo.wav",
     "brideDescription": "Dịu dàng, yêu hoa và luôn tin rằng những điều đẹp nhất bắt đầu từ sự chân thành.",
     "groomDescription": "Điềm tĩnh, ấm áp và luôn muốn cùng người mình thương xây dựng một mái nhà bình yên.",
+    "qrItems": [
+      { "ownerName": "Hà Nhi", "bankName": "Vietcombank", "accountNumber": "0123456789", "qrImage": "/images/qr-bride.svg", "note": "Mung cuoi Hà Nhi Phương Nam" },
+      { "ownerName": "Phương Nam", "bankName": "Techcombank", "accountNumber": "9876543210", "qrImage": "/images/qr-groom.svg", "note": "Mung cuoi Hà Nhi Phương Nam" }
+    ],
     "events": [
       { "title": "Lễ Gia Tiên", "date": "20.12.2026", "time": "09:00", "locationName": "Tư gia nhà gái", "address": "12 Nguyễn Văn Hưởng, Thảo Điền, TP. Hồ Chí Minh", "mapUrl": "https://maps.google.com/?q=Thao+Dien+Ho+Chi+Minh", "description": "Buổi lễ thân mật cùng gia đình hai bên." },
       { "title": "Tiệc Cưới", "date": "20.12.2026", "time": "18:00", "locationName": "The Garden Wedding Hall", "address": "88 Đồng Khởi, Quận 1, TP. Hồ Chí Minh", "mapUrl": "https://maps.google.com/?q=Dong+Khoi+District+1+Ho+Chi+Minh", "description": "Rất mong được đón tiếp bạn trong ngày vui của chúng mình." },

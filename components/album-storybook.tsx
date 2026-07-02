@@ -54,17 +54,17 @@ export function AlbumStorybook() {
         </div>
 
         <section className="grid items-center gap-8 lg:grid-cols-[1fr_320px]">
-          <div className="story-card">
+          <div className="story-card min-w-0">
             <div className="story-page relative overflow-hidden rounded-[2.5rem] border border-white/80 bg-white/70 p-4 backdrop-blur">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-champagne md:aspect-[16/10]">
                 {isLoading && <div className="absolute inset-0 animate-pulse bg-champagne/80" />}
                 {!isLoading && activeImage && (
                   <>
                     <Image src={activeImage.imageUrl} alt={activeImage.title || 'Ảnh album cưới'} fill priority className="object-cover" />
-                    <div className="absolute inset-x-5 bottom-5 rounded-[1.5rem] border border-white/70 bg-white/75 p-5 shadow-lg backdrop-blur">
+                    <div className="absolute inset-x-3 bottom-3 rounded-[1.5rem] border border-white/70 bg-white/75 p-4 shadow-lg backdrop-blur sm:inset-x-5 sm:bottom-5 sm:p-5">
                       <p className="text-xs font-bold uppercase tracking-[0.25em] text-goldSoft">Trang {pageLabel}</p>
-                      <h2 className="mt-1 font-serif text-3xl text-wine">{activeImage.title || 'Khoảnh khắc cưới'}</h2>
-                      <p className="mt-2 text-sm leading-6 text-ink/65">{activeImage.description || 'Một khoảnh khắc đáng nhớ trong album.'}</p>
+                      <h2 className="mt-1 line-clamp-2 font-serif text-2xl text-wine sm:text-3xl">{activeImage.title || 'Khoảnh khắc cưới'}</h2>
+                      <p className="mt-2 line-clamp-3 text-sm leading-6 text-ink/65">{activeImage.description || 'Một khoảnh khắc đáng nhớ trong album.'}</p>
                     </div>
                   </>
                 )}
