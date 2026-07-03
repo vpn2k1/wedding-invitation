@@ -4,8 +4,8 @@
  */
 
 export const brideConfig = {
-  name: "Hoàng Hà Nhi",
-  fullName: "Hà Nhi",
+  name: "Cô dâu",
+  fullName: "Cô dâu",
   role: "Cô dâu",
   description:
     "Dịu dàng, yêu hoa và luôn tin rằng những điều đẹp nhất bắt đầu từ sự chân thành.",
@@ -13,8 +13,8 @@ export const brideConfig = {
 };
 
 export const groomConfig = {
-  name: "Vũ Phương Nam",
-  fullName: "Phương Nam",
+  name: "Chú rể",
+  fullName: "Chú rể",
   role: "Chú rể",
   description:
     "Điềm tĩnh, ấm áp và luôn muốn cùng người mình thương xây dựng một mái nhà bình yên.",

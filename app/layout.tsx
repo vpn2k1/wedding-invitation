@@ -5,7 +5,7 @@ import { MusicProvider } from '@/components/music-provider';
 import { SiteSettingsProvider } from '@/components/site-settings-provider';
 
 export const metadata: Metadata = {
-  title: 'Thiệp cưới Hà Nhi & Phương Nam',
+  title: 'Thiệp cưới Cô dâu & Chú rể',
   description: 'Website thiệp cưới online serverless mẫu, có trang mở thiệp, thông tin cưới, album và lời chúc.',
 };
 
