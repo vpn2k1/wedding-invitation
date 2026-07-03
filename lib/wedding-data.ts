@@ -32,7 +32,7 @@ export const weddingConfig = {
   heroImage: '/images/hero.svg',
   brideImage: '/images/bride.svg',
   groomImage: '/images/groom.svg',
-  musicUrl: '/music/wedding-demo.wav',
+  musicUrl: '/music/wedding-demo.mp3',
 };
 
 export const couple = {

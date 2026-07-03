@@ -42,7 +42,7 @@ export const imagesConfig = {
 };
 
 export const musicConfig = {
-  url: "/music/wedding-demo.wav",
+  url: "/music/wedding-demo.mp3",
 };
 
 /**
