@@ -5,6 +5,7 @@
 :root {
   --font-serif: 'Playfair Display';
   --font-sans: 'Inter';
+  --radius: 8px;
   color-scheme: light;
 }
 
@@ -18,8 +19,12 @@ html {
 
 body {
   margin: 0;
-  background: #fffaf0;
-  color: #332b29;
+  background: #ffffff;
+  color: #111111;
+}
+
+:where(button, input, textarea, select, article, aside, form, [class~='rounded'], [class*='rounded-']) {
+  border-radius: var(--radius) !important;
 }
 
 button,
@@ -31,20 +36,38 @@ select {
 }
 
 ::selection {
-  background: #f4e2c5;
-  color: #6f3b3b;
+  background: #e31b3d;
+  color: #ffffff;
 }
 
 .bg-paper {
   background-image:
-    radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 24rem),
-    linear-gradient(135deg, rgba(255,250,240,0.96), rgba(244,226,197,0.68)),
+    radial-gradient(ellipse 70% 42% at 88% 0%, rgba(255,179,193,0.2), transparent 72%),
+    linear-gradient(145deg, #ffffff 0%, #fffafb 58%, #fff1f4 100%),
     url('/images/paper-texture.svg');
+}
+
+.envelope-stage { perspective: 1400px; }
+.envelope-shell { aspect-ratio: 1.42; filter: drop-shadow(0 24px 34px rgba(120, 15, 40, .2)); position: relative; width: min(92vw, 560px); }
+.envelope-back, .envelope-front, .envelope-flap { border: 1px solid rgba(212, 20, 52, .2); inset: 0; position: absolute; }
+.envelope-back { background: radial-gradient(circle at 50% 0%, #fff, transparent 58%), linear-gradient(145deg, #fffafb, #ffd1da); z-index: 1; }
+.envelope-letter { background: radial-gradient(circle at 84% 8%, rgba(255,179,193,.26), transparent 34%), linear-gradient(145deg, #fff, #fff7f8); border: 1px solid rgba(212,20,52,.24); inset: 7% 7% 12%; position: absolute; transition: transform 900ms cubic-bezier(.2,.8,.2,1); z-index: 2; }
+.envelope-front { background: linear-gradient(145deg, #ffe8ec, #ffb3c1); clip-path: polygon(0 35%, 50% 70%, 100% 35%, 100% 100%, 0 100%); z-index: 4; }
+.envelope-flap { background: linear-gradient(160deg, #fff7f8, #ffccd5); clip-path: polygon(0 0, 100% 0, 50% 72%); transform-origin: top; transition: transform 700ms cubic-bezier(.2,.8,.2,1), z-index 0s 350ms; z-index: 5; }
+.envelope-shell.is-opening .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+.envelope-shell.is-opening .envelope-letter { transform: translateY(-42%); }
+.envelope-letter > * { opacity: 0; transition: opacity 300ms ease; }
+.envelope-shell.is-opening .envelope-letter > * { opacity: 1; transition-delay: 350ms; }
+.envelope-recipient { transition: opacity 240ms ease; }
+.envelope-shell.is-opening .envelope-recipient { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope-flap, .envelope-letter, .envelope-letter > *, .envelope-recipient { transition-duration: .01ms !important; }
 }
 
 .gold-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(198, 161, 91, 0.9), transparent);
+  background: linear-gradient(90deg, transparent, rgba(227, 27, 61, 0.9), transparent);
 }
 
 .story-card {
@@ -53,5 +76,5 @@ select {
 }
 
 .story-page {
-  box-shadow: 0 24px 80px rgba(80, 52, 38, 0.18);
+  box-shadow: 0 24px 80px rgba(17, 17, 17, 0.14);
 }

@@ -1,67 +1,55 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMusic } from '@/components/music-provider';
 import { useSiteSettings } from '@/components/site-settings-provider';
+import { WeddingImage } from '@/components/wedding-image';
 
 export function OpeningCard() {
   const router = useRouter();
   const { startMusic } = useMusic();
-  const { settings } = useSiteSettings();
+  const { settings, isLoading } = useSiteSettings();
   const [isOpening, setIsOpening] = useState(false);
+  const [guestName, setGuestName] = useState('Bạn và gia đình');
+
+  useEffect(() => {
+    const name = new URLSearchParams(window.location.search).get('khach')?.trim();
+    if (name) setGuestName(name.slice(0, 80));
+  }, []);
 
   const handleOpen = async () => {
     setIsOpening(true);
-    await startMusic();
-    window.setTimeout(() => router.push('/invitation'), 900);
+    void startMusic();
+    window.setTimeout(() => router.push(`/invitation${window.location.search}`), 1250);
   };
 
   return (
-    <main className="min-h-screen overflow-hidden bg-paper px-5 py-8 text-ink">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-roseDust/20 blur-3xl" />
-        <div className="absolute -right-24 bottom-4 h-96 w-96 rounded-full bg-goldSoft/20 blur-3xl" />
-      </div>
-
-      <section className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center">
-        <div className="grid w-full items-center gap-8 md:grid-cols-[0.95fr_1.05fr]">
-          <div className="text-center md:text-left">
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.42em] text-goldSoft">Wedding Invitation</p>
-            <h1 className="font-serif text-5xl leading-tight text-wine md:text-7xl">{settings.fullTitle}</h1>
-            <div className="gold-divider my-7" />
-            <p className="mx-auto max-w-lg text-lg leading-8 text-ink/70 md:mx-0">Trân trọng kính mời bạn đến chung vui cùng chúng mình trong ngày đặc biệt.</p>
-            <p className="mt-5 font-serif text-3xl text-wine">{settings.displayDate}</p>
-          </div>
-
-          <div className="story-card mx-auto w-full max-w-md">
-            <div
-              className={`relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white/70 p-4 shadow-card backdrop-blur transition duration-700 ${
-                isOpening ? 'scale-95 rotate-2 opacity-0' : 'animate-float'
-              }`}
-            >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.7rem] bg-champagne">
-                <Image src={settings.coverImage} alt="Ảnh bìa thiệp cưới" fill priority className="object-cover" />
-                <div className="absolute inset-x-8 bottom-8 rounded-[2rem] border border-white/70 bg-white/75 p-6 text-center shadow-lg backdrop-blur">
-                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-goldSoft">Save the date</p>
-                  <p className="mt-2 font-serif text-3xl text-wine">{settings.fullTitle}</p>
-                  <p className="mt-2 text-sm text-ink/65">{settings.displayDate}</p>
-                </div>
-              </div>
+    <main className="bg-paper relative min-h-screen overflow-hidden px-4 py-8 text-ink">
+      <WeddingImage src={isLoading ? null : settings.coverImage} fallbackSrc="/images/cover.svg" alt="Ảnh cưới mở đầu" fill priority sizes="100vw" className="object-cover opacity-10" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(255,255,255,.72),transparent_42%),linear-gradient(145deg,rgba(255,255,255,.94),rgba(255,241,244,.9))]" />
+      <section className="relative z-10 mx-auto flex min-h-[calc(100svh-4rem)] max-w-4xl flex-col items-center justify-center text-center">
+        <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-wine">Thiệp mời ngày cưới</p>
+        <h1 className="mt-3 font-serif text-4xl leading-tight sm:text-6xl">{settings.brideName} <span className="text-wine">&</span> {settings.groomName}</h1>
+        <p className="mt-2 text-sm font-bold text-ink/60">{settings.displayDate}</p>
+        <div className="envelope-stage mt-16 sm:mt-20">
+          <div className={`envelope-shell ${isOpening ? 'is-opening' : ''}`}>
+            <div className="envelope-back rounded-lg" />
+            <div className="envelope-letter flex flex-col items-center justify-center rounded-lg px-6 pb-8 text-center">
+              <p className="text-[0.65rem] font-bold uppercase tracking-[0.24em] text-wine">Hẹn ngày chung vui</p>
+              <p className="mt-3 font-serif text-3xl sm:text-5xl">{settings.fullTitle}</p>
+              <p className="mt-4 text-sm font-bold text-ink/60">{settings.displayDate}</p>
             </div>
-
-            <button
-              type="button"
-              onClick={handleOpen}
-              disabled={isOpening}
-              className="mx-auto mt-8 flex min-w-56 items-center justify-center rounded-full bg-wine px-8 py-4 text-sm font-bold uppercase tracking-[0.28em] text-white shadow-card transition hover:-translate-y-1 hover:bg-[#5e3030] disabled:cursor-wait disabled:opacity-70"
-            >
-              {isOpening ? 'Đang mở...' : 'Mở thiệp'}
-            </button>
-            <p className="mt-4 text-center text-sm text-ink/55">Bấm mở thiệp để phát nhạc nền.</p>
+            <div className="envelope-flap rounded-lg" />
+            <div className="envelope-front rounded-lg" />
+            <div className="envelope-recipient absolute inset-x-8 bottom-[12%] z-[6] text-center">
+              <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-wine">Trân trọng kính mời</p>
+            </div>
           </div>
         </div>
+        <button type="button" onClick={handleOpen} disabled={isOpening} className="relative z-20 mt-8 min-h-14 min-w-60 rounded-lg bg-wine px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-card transition hover:-translate-y-1 hover:bg-[#8f0b24] disabled:cursor-wait disabled:opacity-70">
+          {isOpening ? 'Đang mở thiệp...' : 'Mở thiệp cưới'}
+        </button>
       </section>
     </main>
   );

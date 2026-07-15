@@ -1,13 +1,13 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { getFallbackAlbumImages } from '@/lib/supabase/mappers';
+import { WeddingImage } from '@/components/wedding-image';
 import type { AlbumImage } from '@/lib/supabase/types';
 
 export function AlbumStorybook() {
-  const [images, setImages] = useState<AlbumImage[]>(getFallbackAlbumImages());
+  const [images, setImages] = useState<AlbumImage[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const activeImage = images[activeIndex];
@@ -60,8 +60,8 @@ export function AlbumStorybook() {
                 {isLoading && <div className="absolute inset-0 animate-pulse bg-champagne/80" />}
                 {!isLoading && activeImage && (
                   <>
-                    <Image src={activeImage.imageUrl} alt={activeImage.title || 'Ảnh album cưới'} fill priority className="object-cover" />
-                    <div className="absolute inset-x-3 bottom-3 rounded-[1.5rem] border border-white/70 bg-white/75 p-4 shadow-lg backdrop-blur sm:inset-x-5 sm:bottom-5 sm:p-5">
+                    <WeddingImage src={activeImage.imageUrl} alt={activeImage.title || 'Ảnh album cưới'} fill priority sizes="(min-width: 1024px) 65vw, 100vw" className="object-cover" />
+                    <div className="absolute inset-x-3 bottom-3 z-10 rounded-[1.5rem] border border-white/70 bg-white/75 p-4 shadow-lg backdrop-blur sm:inset-x-5 sm:bottom-5 sm:p-5">
                       <p className="text-xs font-bold uppercase tracking-[0.25em] text-goldSoft">Trang {pageLabel}</p>
                       <h2 className="mt-1 line-clamp-2 font-serif text-2xl text-wine sm:text-3xl">{activeImage.title || 'Khoảnh khắc cưới'}</h2>
                       <p className="mt-2 line-clamp-3 text-sm leading-6 text-ink/65">{activeImage.description || 'Một khoảnh khắc đáng nhớ trong album.'}</p>
@@ -75,10 +75,10 @@ export function AlbumStorybook() {
 
           <aside className="rounded-[2rem] border border-white/80 bg-white/65 p-5 shadow-card backdrop-blur">
             <div className="flex gap-3">
-              <button type="button" onClick={goPrev} className="flex-1 rounded-full border border-wine/20 px-5 py-3 font-bold text-wine transition hover:bg-wine hover:text-white">
+              <button type="button" onClick={goPrev} disabled={isLoading || images.length < 2} className="flex-1 rounded-full border border-wine/20 px-5 py-3 font-bold text-wine transition hover:bg-wine hover:text-white disabled:cursor-wait disabled:opacity-50">
                 Trước
               </button>
-              <button type="button" onClick={goNext} className="flex-1 rounded-full bg-wine px-5 py-3 font-bold text-white transition hover:bg-[#5e3030]">
+              <button type="button" onClick={goNext} disabled={isLoading || images.length < 2} className="flex-1 rounded-full bg-wine px-5 py-3 font-bold text-white transition hover:bg-[#5e3030] disabled:cursor-wait disabled:opacity-50">
                 Sau
               </button>
             </div>
@@ -92,8 +92,11 @@ export function AlbumStorybook() {
                   className={`relative aspect-square overflow-hidden rounded-2xl border transition ${index === activeIndex ? 'border-wine ring-2 ring-wine/20' : 'border-champagne opacity-70 hover:opacity-100'}`}
                   aria-label={`Xem ảnh ${image.title || index + 1}`}
                 >
-                  <Image src={image.imageUrl} alt="" fill className="object-cover" />
+                  <WeddingImage src={isLoading ? null : image.imageUrl} alt="" fill sizes="96px" className="object-cover" />
                 </button>
+              ))}
+              {isLoading && Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="aspect-square animate-pulse rounded-2xl bg-champagne/80" />
               ))}
             </div>
 

@@ -93,7 +93,7 @@ export function CommentSection() {
   };
 
   return (
-    <section className="bg-[#fff6e6] px-5 py-20">
+    <section className="bg-ivory px-5 py-20">
       <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[0.9fr_1.1fr]">
         <div>
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.35em] text-goldSoft">Guestbook</p>
@@ -143,7 +143,7 @@ export function CommentSection() {
             >
               {isSubmitting ? 'Đang gửi...' : 'Gửi lời chúc'}
             </button>
-            {notice && <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">{notice}</p>}
+            {notice && <p className="rounded-2xl bg-champagne px-4 py-3 text-sm font-semibold text-ink">{notice}</p>}
             {error && <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">{error}</p>}
           </form>
         </div>

@@ -1,14 +1,14 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { SectionHeading } from '@/components/section-heading';
 import { getFallbackAlbumImages } from '@/lib/supabase/mappers';
+import { WeddingImage } from '@/components/wedding-image';
 import type { AlbumImage } from '@/lib/supabase/types';
 
 export function AlbumPreview() {
-  const [images, setImages] = useState<AlbumImage[]>(getFallbackAlbumImages());
+  const [images, setImages] = useState<AlbumImage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -17,9 +17,7 @@ export function AlbumPreview() {
     fetch('/api/album')
       .then((response) => response.json())
       .then((data: { images?: AlbumImage[] }) => {
-        if (isMounted && data.images?.length) {
-          setImages(data.images);
-        }
+        if (isMounted) setImages(data.images?.length ? data.images : getFallbackAlbumImages());
       })
       .catch(() => {
         if (isMounted) setImages(getFallbackAlbumImages());
@@ -47,7 +45,7 @@ export function AlbumPreview() {
             : images.slice(0, 4).map((image, index) => (
                 <div key={image.id} className={`relative overflow-hidden rounded-[1.5rem] bg-champagne shadow-card ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}>
                   <div className={`${index === 0 ? 'aspect-square' : 'aspect-[4/5]'}`}>
-                    <Image src={image.imageUrl} alt={image.title || 'Ảnh album cưới'} fill className="object-cover transition duration-500 hover:scale-105" />
+                    <WeddingImage src={image.imageUrl} alt={image.title || 'Ảnh album cưới'} fill sizes={index === 0 ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 25vw, 50vw'} className="object-cover transition duration-500 hover:scale-105" />
                   </div>
                 </div>
               ))}

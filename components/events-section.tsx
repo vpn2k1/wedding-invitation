@@ -8,7 +8,7 @@ export function EventsSection() {
   const gridClassName = settings.layout.eventColumns === '2' ? 'md:grid-cols-2' : 'md:grid-cols-3';
 
   return (
-    <section className="bg-[#fff6e6] px-5 py-20">
+    <section className="bg-ivory px-5 py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading eyebrow="Wedding Events" title="Thông tin buổi lễ" description="Mong bạn lưu lại thời gian và đến chung vui cùng gia đình hai bên." />
         <div className={`grid gap-5 ${gridClassName}`}>

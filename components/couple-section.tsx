@@ -1,11 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import { SectionHeading } from '@/components/section-heading';
 import { useSiteSettings } from '@/components/site-settings-provider';
+import { WeddingImage } from '@/components/wedding-image';
 
 export function CoupleSection() {
-  const { settings } = useSiteSettings();
+  const { settings, isLoading } = useSiteSettings();
   const people = [
     {
       name: settings.brideName,
@@ -29,7 +29,7 @@ export function CoupleSection() {
           {people.map((person) => (
             <article key={person.name} className="rounded-[2rem] border border-champagne bg-white/80 p-5 shadow-card">
               <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-champagne">
-                <Image src={person.image} alt={person.name} fill className="object-cover" />
+                <WeddingImage src={isLoading ? null : person.image} alt={person.name} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
               </div>
               <div className="p-4 text-center">
                 <p className="text-xs font-bold uppercase tracking-[0.3em] text-goldSoft">{person.role}</p>

@@ -1,11 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import { SectionHeading } from '@/components/section-heading';
 import { useSiteSettings } from '@/components/site-settings-provider';
+import { WeddingImage } from '@/components/wedding-image';
 
 export function QrSection() {
-  const { settings } = useSiteSettings();
+  const { settings, isLoading } = useSiteSettings();
 
   return (
     <section className="px-5 py-20">
@@ -15,7 +15,7 @@ export function QrSection() {
           {settings.qrItems.map((bank, index) => (
             <article key={`${bank.accountNumber}-${index}`} className="rounded-[2rem] border border-champagne bg-white/85 p-5 text-center shadow-card sm:p-6">
               <div className="relative mx-auto aspect-square w-full max-w-56 overflow-hidden rounded-3xl border border-champagne bg-white p-4">
-                <Image src={bank.qrImage} alt={`QR ${bank.ownerName}`} fill className="object-contain p-4" />
+                <WeddingImage src={isLoading ? null : bank.qrImage} alt={`QR ${bank.ownerName}`} fill sizes="224px" className="object-contain p-4" />
               </div>
               <h3 className="mt-6 break-words font-serif text-3xl text-wine">{bank.ownerName}</h3>
               <p className="mt-2 font-semibold text-ink/80">{bank.bankName}</p>

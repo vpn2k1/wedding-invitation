@@ -5,19 +5,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ivory: '#fffaf0',
-        champagne: '#f4e2c5',
-        roseDust: '#c98f8f',
-        wine: '#6f3b3b',
-        goldSoft: '#c6a15b',
-        ink: '#332b29',
+        ivory: '#fffafb',
+        champagne: '#ffd1da',
+        roseDust: '#f8a8b8',
+        wine: '#b30f2d',
+        goldSoft: '#d41434',
+        ink: '#111111',
       },
       fontFamily: {
         serif: ['var(--font-serif)', 'Georgia', 'serif'],
         sans: ['var(--font-sans)', 'Arial', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 24px 80px rgba(80, 52, 38, 0.16)',
+        card: '0 24px 80px rgba(17, 17, 17, 0.14)',
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
